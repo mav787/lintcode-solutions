@@ -1,26 +1,31 @@
 package bFS;
-
 import java.util.*;
 
 public class TTT611 {
-	public int shortestPath(boolean[][] grid, Point source, Point destination) {
+private static final int[][] offset = {{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{-2,1},{2,-1},{-2,-1}};
+     
+    
+    public int shortestPath(boolean[][] grid, Point source, Point destination) {
         // Write your code here
-        // 0 as empty and 1 as barrier ???
+        // false as empty and true as barrier ???
         if(grid == null || grid.length == 0 || grid[0].length == 0){
             return -1;
         }
-        if(!isValid(source, grid) || !isValid(destination, grid)){
+        if(!isValid(source.x, source.y, grid) || !isValid(destination.x, destination.y, grid)){
             return -1;
         }
         if(grid[source.x][source.y] == true || grid[destination.x][destination.y] == true){
             return -1;
         }
         
-
+        // int m = grid.length;
+        // int n = grid[0].length;
+        
         int steps = 0;
         
         Queue<Point> queue = new LinkedList<Point>();
         queue.offer(source);
+        grid[source.x][source.y] = true;
         while(!queue.isEmpty()){
             int size = queue.size();
             for(int i = 0; i < size; i++){
@@ -29,15 +34,13 @@ public class TTT611 {
                 if(reach(point, destination)){
                     return steps;
                 }
-                if(!isValid(point, grid)){
-                    continue;
-                }
-                grid[point.x][point.y] = true;
-                
-                Point[] arr = neighbors(point);
+//              if(!isValid(point, grid)){
+//              	continue;
+//          	}
                 for(int j = 0; j < 8; j++){
-                    if(isValid(arr[j], grid)){
-                        queue.offer(arr[j]);
+                    if(isValid(point.x + offset[j][0], point.y + offset[j][1], grid)){
+                        queue.offer(new Point(point.x + offset[j][0], point.y + offset[j][1]));
+                        grid[point.x + offset[j][0]][point.y + offset[j][1]] = true;
                     }
                 }
             }
@@ -47,13 +50,10 @@ public class TTT611 {
     }
     
     
-    private boolean isValid(Point point, boolean[][] grid){
+    private boolean isValid(int x, int y, boolean[][] grid){
         int m = grid.length;
         int n = grid[0].length;
-        
-        int x = point.x;
-        int y = point.y;
-        
+
         if(x < 0 || x >= m || y < 0 || y >= n){
             return false;
         }
@@ -70,28 +70,4 @@ public class TTT611 {
         }
         return false;
     }
-    
-    private Point[] neighbors(Point point){
-        int x = point.x;
-        int y = point.y;
-                
-        Point[] arr = new Point[8];
-        arr[0] = new Point(x - 2, y - 1);
-        arr[1] = new Point(x - 1, y - 2);
-        arr[2] = new Point(x + 2, y - 1);
-        arr[3] = new Point(x + 1, y - 2);
-        arr[4] = new Point(x - 2, y + 1);
-        arr[5] = new Point(x - 1, y + 2);
-        arr[6] = new Point(x + 2, y + 1);
-        arr[7] = new Point(x + 1, y + 2);
-        
-        return arr;
-    }
 }
-
-
-class Point {
-	      public int x, y;
-	      public Point() { x = 0; y = 0; }
-	      public Point(int a, int b) { x = a; y = b; }
-	  }

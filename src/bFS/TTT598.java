@@ -13,6 +13,7 @@ public class TTT598 {
         
         int days = 0, zombie = 0, people = 0, sum = 0;
         Queue<Coordinate> queue = new LinkedList<>();
+        // initialize BFS
         for(int i = 0; i < m; i++){
             for(int j = 0; j < n; j++){
                 if(grid[i][j] == 1){
@@ -25,18 +26,22 @@ public class TTT598 {
             }
         }
         sum = zombie + people;
+        if(zombie == sum) return days;
         
         while(!queue.isEmpty()){
             ArrayList<Coordinate> level = new ArrayList<>();
+            // dequeue all zombies
             while(!queue.isEmpty()){
                 level.add(queue.poll());
             }
             
+            // infect and enqueue new zombies
             ArrayList<Coordinate> newLevel = infect(level, grid);
             for(Coordinate coord:newLevel){
                 queue.offer(coord);
                 zombie++;
             }
+            // update days
             days++;
             
             if(zombie == sum){
@@ -54,7 +59,7 @@ public class TTT598 {
         for(Coordinate coord: formerLevel){
             int x = coord.x;
             int y = coord.y;
-            
+            // check bounds and whether isPeople..
             if(x - 1 >= 0 && grid[x - 1][y] == 0){
                 grid[x - 1][y] = 1;
                 res.add(new Coordinate(x - 1, y));

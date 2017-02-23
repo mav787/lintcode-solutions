@@ -4,25 +4,20 @@ import java.util.*;
 
 public class TTT480 {
 	public List<String> binaryTreePaths(TreeNode root) {
-        List<String> res = new ArrayList<>();
-        if (root == null) {
+        // Write your code here
+        List<String> res = new ArrayList<String>();
+        if(root == null) return res;
+        if(root.left == null && root.right == null){
+            res.add("" + root.val);
             return res;
         }
         
-        List<String> leftPaths = binaryTreePaths(root.left);
-        List<String> rightPaths = binaryTreePaths(root.right);
-        for (String path : leftPaths) {
-            res.add(root.val + "->" + path);
+        for(String s : binaryTreePaths(root.left)){
+            res.add(root.val + "->" + s);
         }
-        for (String path : rightPaths) {
-            res.add(root.val + "->" + path);
+        for(String s : binaryTreePaths(root.right)){
+            res.add(root.val + "->" + s);
         }
-        
-        // root is a leaf
-        if (res.size() == 0) {
-            res.add("" + root.val);
-        }
-        
         return res;
     }
 }

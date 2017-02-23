@@ -2,53 +2,48 @@ package binarySearch;
 
 public class TTT437 {
 	public int copyBooks(int[] pages, int k) {
-        if (pages.length == 0) {
-            return 0;  
+        // write your code here
+        if(pages == null || pages.length == 0){
+            return 0;
         }
-        
-        int total = 0;
-        int max = pages[0];
-        for (int i = 0; i < pages.length; i++) {
-            total += pages[i];
-            if (pages[i] > max) {
-                max = pages[i];
-            }
+        int max = 0, sum = 0;
+        for(int i = 0; i < pages.length; i++){
+            max = Math.max(max, pages[i]);
+            sum += pages[i];
         }
-        
-        int start = max;
-        int end = total;
-        
-        while (start + 1 < end) {
+        int start = max, end = sum;
+        while(start + 1 < end){
             int mid = start + (end - start) / 2;
-            if (countCopiers(pages, mid) > k) {
+            if(numOfPeople(pages, mid) > k){
                 start = mid;
-            } else {
+            }
+            else if(numOfPeople(pages, mid) == k){
+                end = mid;
+            }
+            else{
                 end = mid;
             }
         }
-        
-        if (countCopiers(pages, start) <= k) {
+        if(numOfPeople(pages, start) <= k){
             return start;
         }
-        
-        return end;
+        else{
+            return end;
+        }
     }
     
-    private int countCopiers(int[] pages, int limit) {
-        if (pages.length == 0) {
-            return 0;
-        }
-        
-        int copiers = 1;
-        int sum = pages[0]; // limit is always >= pages[0]
-        for (int i = 1; i < pages.length; i++) {
-            if (sum + pages[i] > limit) {
-                copiers++;
-                sum = 0;
+    private int numOfPeople(int[] pages, int time){
+        int people = 1;
+        int persum = 0;
+        for(int i = 0; i < pages.length; i++){
+            if(persum + pages[i] <= time){
+                persum += pages[i];
             }
-            sum += pages[i];
+            else{
+                people++;
+                persum = pages[i];
+            }
         }
-        
-        return copiers;
+        return people;
     }
 }

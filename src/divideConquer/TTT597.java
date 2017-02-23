@@ -1,41 +1,44 @@
 package divideConquer;
 
 public class TTT597 {
-	public TreeNode findSubtree2(TreeNode root) {
+    /**
+     * @param root the root of binary tree
+     * @return the root of the maximum average of subtree
+     */
+     
+    private TreeNode ans = null;
+    private double maxavg = Double.MIN_VALUE;
+    
+    public TreeNode findSubtree2(TreeNode root) {
         // Write your code here
-        if(root == null){
-            return null;
-        }
+        if(root == null) return null;
         helper(root);
-        return res;
-        
+        return ans;
     }
     
-    private TreeNode res = null;
-    private sumNum global = null;
-    
-    private sumNum helper(TreeNode node){
+    private SumNum helper(TreeNode node){
         if(node == null){
-            return new sumNum(0,0);
+            return new SumNum(0, 0);
         }
-        sumNum left = helper(node.left);
-        sumNum right = helper(node.right);
-        sumNum thisNode = new sumNum(left.sum + right.sum + node.val, left.num + right.num + 1);
-            
-        if(global == null || (thisNode.sum / (double)thisNode.num) >= (global.sum / (double)global.num)){
-            global = thisNode;
-            res = node;
+        // calculate the return value;
+        SumNum left = helper(node.left);
+        SumNum right = helper(node.right);
+        int thissum = left.sum + right.sum + node.val;
+        int thisnum = left.num + right.num + 1;
+        double avg = (double)thissum / thisnum;
+        if(ans == null || avg > maxavg){
+            maxavg = avg;
+            ans = node;
         }
-        return thisNode;
+        return new SumNum(thissum, thisnum);
     }
-   
-    
-    private class sumNum{
-        int sum;
-        int num;
-        sumNum(int s, int n){
-            sum = s;
-            num = n;
-        }
+}
+
+class SumNum{
+    int sum;
+    int num;
+    SumNum(int s, int n){
+        sum = s;
+        num = n;
     }
 }
