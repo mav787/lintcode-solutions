@@ -3,7 +3,7 @@ package T1_100;
 public class T6 {
 	public int[] mergeSortedArray(int[] A, int[] B) {
         // Write your code here
-        if(A == null || B == null)
+        if(A == null && B == null)
             return null;
         if(A == null) 
         	return B;
